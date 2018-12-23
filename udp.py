@@ -5,8 +5,11 @@ from pygame import joystick
 import math
 import serial
 from time import sleep
+<<<<<<< HEAD
 import os
 
+=======
+>>>>>>> 64b8ef3640f1d5c8a592fae197a2df39e7b692a6
     
 def map1(x,in_min,in_max,out_min,out_max):
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
@@ -66,6 +69,7 @@ def motorcode():
 	x1=j.get_axis(0)
 	y1=j.get_axis(1)
 	gear=j.get_axis(3)
+<<<<<<< HEAD
 	hat=j.get_hat(0)
 	
 	gear=int(map1(gear,-1.0,1.0,9,0))
@@ -74,12 +78,19 @@ def motorcode():
 
 	zero=j.get_axis(2)
 
+=======
+	gear=int(map1(gear,-1.0,1.0,9,0))
+	x=map1(x1,-1.0,1.0,0.0,9999)
+	y=map1(y1,-1.0,1.0,0.0,9999)
+	zero=j.get_axis(2)
+>>>>>>> 64b8ef3640f1d5c8a592fae197a2df39e7b692a6
 	if(zero>0.7):
 		x=9999
 		y=4999
 	elif(zero<-0.7):
 		x=0
 		y=4999
+<<<<<<< HEAD
 
 	if hat[1]==1:
 		y=0
@@ -97,6 +108,12 @@ def motorcode():
 	clear = lambda : os.system('tput reset')
 	#clear()
 	print(val)
+=======
+	x=str(int(x)).zfill(4)
+	y=str(int(y)).zfill(4)
+	val="m"+str(gear)+"x"+str(x)+"y"+str(y)
+	#print(x,y)
+>>>>>>> 64b8ef3640f1d5c8a592fae197a2df39e7b692a6
 	try:
 		transmit.sendto(val,(UDP_IP,UDP_PORT))
 	except Exception:
@@ -115,7 +132,11 @@ count=0
 transmit=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
 #h=socket.gethostbyaddr('192.168.0.3')
 #print h
+<<<<<<< HEAD
 UDP_IP = '192.168.43.113' # this IP of my pc. When I want raspberry pi 2`s as a client, I replace it with its IP '169.254.54.195'
+=======
+UDP_IP = '192.168.1.2' # this IP of my pc. When I want raspberry pi 2`s as a client, I replace it with its IP '169.254.54.195'
+>>>>>>> 64b8ef3640f1d5c8a592fae197a2df39e7b692a6
 UDP_PORT = 5005
 
 
@@ -123,9 +144,12 @@ UDP_PORT = 5005
 
 joystick.init()
 pygame.display.init()
+<<<<<<< HEAD
 if pygame.joystick.get_count() == 0:
     print("No joystick detected")
     exit(0)
+=======
+>>>>>>> 64b8ef3640f1d5c8a592fae197a2df39e7b692a6
 j=joystick.Joystick(0)
 j.init()			
 adx='a'
