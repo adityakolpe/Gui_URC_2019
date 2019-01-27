@@ -43,8 +43,8 @@ ys=[]
 
 global latf
 global lonf
-latf = 13.350443 
-lonf = 74.789508
+latf = 13.3497387 
+lonf = 74.7928878
 global lati
 global loni 
 lati,loni=pos_update()

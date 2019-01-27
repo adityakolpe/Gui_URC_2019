@@ -101,14 +101,7 @@ def ballDetect():
 	
 	#os.system("xdotool search --onlyvisible --sync --name \"Python\ 2.7+\ Shell\" set_window --name \"Motorcode\"")
 	for i in out.split():
-		os.system("xdotool windowminimize "+i.strip())
-
-
-
-
-a = Tk()
-a.title("MRM") 																																											
-
+		os.system("xdotool windowminimize "+i.strip())																																						
 
 def motorcode():
 
@@ -145,6 +138,8 @@ def close():
 		os.system("xdotool windowactivate --sync "+i)
 		os.system("xdotool getactivewindow windowkill")
 
+a = Tk()
+a.title("MRM") 		
 Button(a, text="DigitalCam9", command = digitalcam9, bg="white", fg = "black", font=("comic_sans",15,"bold")).grid(row = 0, column = 0)
 Button(a, text="DigitalCam10", command = digitalcam10, bg="white", fg = "black", font=("comic_sans",15,"bold")).grid(row = 0, column = 1)
 Button(a, text="AnalogCams", command = analogcams, bg="white", fg = "black", font=("comic_sans",15,"bold")).grid(row = 0, column = 4)
