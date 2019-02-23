@@ -7,7 +7,7 @@ import serial
 from time import sleep
 import os
 from pygame.math import Vector2
-
+h=False
     
 def map1(x,in_min,in_max,out_min,out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
@@ -15,8 +15,8 @@ def arm():
         
         m1=j.get_button(6)
         m2=j.get_button(7)
-        m3=j.get_button(5)
-        m4=j.get_button(9)
+        m3=j.get_button(3)
+        m4=j.get_button(5)
         m5=j.get_button(4)
         m6=j.get_button(2)
         hat=j.get_hat(0)
@@ -27,49 +27,49 @@ def arm():
                 if hat[0]==1:
 
                         p='swivel clockwise '
-                        data="nA"
+                        data="nG"
                 elif hat[0]==-1:
                         p='swivel anticlockwise '
-                        data="nB"#swivel
+                        data="nH"#swivel
         elif m2:
-                p='2nd Link'
+                p='1st Link'
                 if  hat[1]==1:
-                        p='2nd link linear down '
+                        p='1st link linear down '
                         data="nC"
                 elif hat[1]==-1:
-                        p='2nd link linear up '
+                        p='1st link linear up '
                         data="nD"#actuator
         elif m3:
-                p='pitch'
-                if hat[1]==-1 :
-                        p='pitch up '
+                p='Roll'
+                if hat[0]==-1 :
+                        p='Roll anticlockwise '
                         data="nE"
-                elif hat[1]==1:
-                        p='pitch down'
+                elif hat[0]==1:
+                        p='Roll clockwise'
                         data="nF"
         elif m6:
                 p='gripper'
-                if hat[1]==-1 or hat[0]==-1:
-                        p='gripper close '
-                        data="nG"
-                elif hat[1]==1 or hat[0]==1:         
+                if hat[1]==-1:
                         p='gripper open '
-                        data="nH"
+                        data="nA"
+                elif hat[1]==1:         
+                        p='gripper close '
+                        data="nB"
         elif m4:
-                p='roll'
-                if hat[0]==-1:
-                        p='roll anticlockwise '
+                p='Pitch'
+                if hat[1]==-1:
+                        p='Pitch up '
                         data="nI"
-                elif hat[0]==1 :
-                        p='roll clockwise '
+                elif hat[1]==1:
+                        p='Pitch down'
                         data="nJ"
         elif m1:
-                p='1st link'
-                if hat[1]==-1 :
-                        p='link 1 linear  up'
+                p='2nd link'
+                if hat[1]==1 :
+                        p='link 2 linear  up'
                         data="nK"
-                elif hat[1]==1 :
-                        p='link 1 linear down'
+                elif hat[1]==-1 :
+                        p='link 2 linear down'
                         data="nL"#gripper
         else:
                 p="N/A"
@@ -77,10 +77,14 @@ def arm():
         print(p+data)                
         transmit.send(data)
 
+
 def motorcode():
-        global x1,y1,gear
+        global x1,y1,gear,h
         x1=j.get_axis(0)
         y1=j.get_axis(1)
+        c1=j.get_button(6)
+        c2=j.get_button(7)
+
         #print(x1,y1)
         gear=0
         gear=j.get_axis(3)
@@ -100,20 +104,45 @@ def motorcode():
                 x=0
                 y=4999
 
-        if hat[1]==1:
-                y=0
-        elif hat[1]==-1:
-                y=9999
-        if hat[0]==1:
-                x=9999
-        elif hat[0]==-1:
-                x=0
+        # if hat[1]==1:
+        #         y=0
+        # elif hat[1]==-1:
+        #         y=9999
+        # if hat[0]==1:
+        #         x=9999
+        # elif hat[0]==-1:
+        #         x=0
+        p=' '
+        camera="z"
+        if c1:
+                p='Mast Yaw'
+                if hat[0]==1:
 
+                        p='Mast Yaw clockwise '
+                        camera="a"
+                elif hat[0]==-1:
+                        p='Mast Yaw anticlockwise '
+                        camera="b"
+        elif c2:
+                p='Mast Pitch'
+                if  hat[1]==1:
+                        p='Mast Pitch down '
+                        camera="c"
+                elif hat[1]==-1:
+                        p='Mast Pitch up '
+                        camera="d"
 
         x=str(int(x)).zfill(4)
         y=str(int(y)).zfill(4)
-
-        val="m"+str(gear)+"x"+str(x)+"y"+str(y)
+        if j.get_button(4):
+        	sleep(0.2)
+        	if j.get_button(4):
+        		h=not h
+        if h==True:
+        	hill='w'
+        else:
+        	hill='m'
+        val=hill+str(gear)+"x"+str(x)+"y"+str(y)+camera
         #clear()
         print(val)
 
@@ -192,6 +221,6 @@ try:
                     else:
                             arm()
 except KeyboardInterrupt:
-    print('lol')
-    pygame.display.quit()
-pygame.quit()
+	transmit.send('m4x4999y4999z')
+	pygame.display.quit()
+	pygame.quit()
